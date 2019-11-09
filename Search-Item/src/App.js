@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Icon, Input } from 'antd';
+import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -12,7 +12,10 @@ class SearchItem extends Component {
         this.state = {
             collapsed: true,
             result: [],
-        }
+        };
+        this.getItem = this.getItem.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        // this.getDetail = this.getDetail.bind(this);
     }
 
     render() {
@@ -22,39 +25,70 @@ class SearchItem extends Component {
                 breakpoint="md"
                 collapsedWidth="0"
               >
-              <div style = {{ padding: "12px"}}>
-                <Search
+                <div style = {{ padding: "12px"}}>
+                  <Search
                   placeholder="input search text"
-                  onSearch={value => console.log(value)}
-                />
+                  onSearch={this.handleSearch}
+                  />
                 </div>
-                  <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                    <Menu.Item key="1">
-                      <Icon type="user" />
-                      <span className="nav-text">nav 1</span>
-                    </Menu.Item>
-                  </Menu>
+                <Menu theme="dark" mode="inline">
+                　{this.getItem()}
+                </Menu>
               </Sider>
 
               <Layout>
                 <Header style={{ background: '#fff', padding: 0 }} />
-                <Content style={{ margin: '24px 16px 0' }}>
-                  <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>content</div>
-                </Content>
+
+                
+
                 <Footer style={{ textAlign: 'center' }}>Search Item</Footer>
               </Layout>
             </Layout>)
     }
 
+    getItem() {
+        return (
+            this.state.result.map((item, index) => (
+                <Menu.Item key={ index } onClick = {this.getDetail.bind(this, index)} >
+                  <img src={item.bg_pic} alt="" style={{width: '150px'}}/>
+                </Menu.Item>
+            ))
+        )
+    }
+
+    getDetail(index) {
+        console.log(this.state.result[index].content);
+        this.showDetail.bind(this. index);
+        // console.log(index);
+    }
+
+    showDetail(index) {
+      // let index = index;
+        return (
+            <Content style={{ margin: '24px 16px 0' }}>
+              {/*<div style={{ padding: 24, background: '#fff', minHeight: 360 }}>content</div>*/}
+              {this.state.result[index].content.map(index=>(
+console.log(index)
+                ))}
+            </Content>
+        )
+    }
+
+    handleSearch() {
+        console.log(this.state)
+    }
+
     componentDidMount() {
         axios.get('https://api.apiopen.top/musicRankings').then((res) => {
-          console.log(res.data)
-            this.setState(()=>({
-              result: res.data.result
-
-            }))
+            if (res.data.code === 200) {
+                const result = res.data.result;
+                this.setState({
+                    result
+                })
+                console.log(this.state)
+                return;
+            }
         })
-        console.log(this.state)
     }
 }
 
