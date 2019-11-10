@@ -12,6 +12,7 @@ class SearchItem extends Component {
         this.state = {
             collapsed: true,
             result: [],
+            current: []
         };
         this.getItem = this.getItem.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -38,8 +39,24 @@ class SearchItem extends Component {
 
               <Layout>
                 <Header style={{ background: '#fff', padding: 0 }} />
-
-                
+                <Content style={{ margin: '24px 16px 0'}}>
+              <div style={{ padding: 24, background: '#fff', minHeight: 360, overflow: 'hidden' }}>
+               {this.state.current.map((item, index)=>(
+                 <div 
+                 key={ index } 
+                 style={{ float:'left', marginRight:'16px', marginBottom: '16px', width:'200px', height: '200px'}}>
+                   <div style={{textAlign: 'center'}} >
+                   <img src={item.pic_small} alt=""/>
+                   </div>
+                   <div style={{textAlign: 'center'}}>Title:</div>
+                   <div style={{textAlign: 'center'}}>{item.album_title}</div>
+                   <div style={{textAlign: 'center'}}>Author:</div>
+                   <div style={{textAlign: 'center'}}>{item.author}</div>
+                 </div>
+                 )
+                )}
+              </div>
+                </Content>
 
                 <Footer style={{ textAlign: 'center' }}>Search Item</Footer>
               </Layout>
@@ -57,21 +74,9 @@ class SearchItem extends Component {
     }
 
     getDetail(index) {
-        console.log(this.state.result[index].content);
-        this.showDetail.bind(this. index);
-        // console.log(index);
-    }
-
-    showDetail(index) {
-      // let index = index;
-        return (
-            <Content style={{ margin: '24px 16px 0' }}>
-              {/*<div style={{ padding: 24, background: '#fff', minHeight: 360 }}>content</div>*/}
-              {this.state.result[index].content.map(index=>(
-console.log(index)
-                ))}
-            </Content>
-        )
+        this.setState({
+          current: this.state.result[index].content
+        });
     }
 
     handleSearch() {
@@ -85,7 +90,6 @@ console.log(index)
                 this.setState({
                     result
                 })
-                console.log(this.state)
                 return;
             }
         })
