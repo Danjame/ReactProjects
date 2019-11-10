@@ -19,11 +19,13 @@ class SearchItem extends Component {
             isShow: 'none',
             displayImg: '',
             inputValue: '',
-            searchList: []
+            searchList: [],
+            searchedItem: null
         };
         this.getItem = this.getItem.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
+        this.showDetails = this.showDetails.bind(this);
         this.handInputValue = this.handInputValue.bind(this);
+        this.selectSearchItem = this.selectSearchItem.bind(this);
         // this.showSingleItem = this.showSingleItem.bind(this);
         // this.getDetail = this.getDetail.bind(this);
     }
@@ -39,10 +41,12 @@ class SearchItem extends Component {
                   <Search
                   placeholder="input search text"
                   onChange = {this.handInputValue}
-                  onSearch={this.handleSearch}
+                  allowClear = {true}
                   />
                 </div>
-                <SearchResult searchList = {this.state.searchList}/>
+                <SearchResult searchList = {this.state.searchList}
+                              selectSearchItem = {this.selectSearchItem}
+                />
                 <Menu theme="dark" mode="inline">
                 　{this.getItem()}
                 </Menu>
@@ -52,20 +56,7 @@ class SearchItem extends Component {
                 <Header style={{ background: '#fff', padding: 0, textAlign: 'center', fontSize: 20 }}>Search Your Favorite Song</Header>
                 <Content style={{ margin: '24px 16px 0'}}>
               <div style={{ padding: 24, background: '#fff', minHeight: 360, overflow: 'hidden' }}>
-               {this.state.current.map((item, index)=>(
-                 <div 
-                 key={ index } 
-                 style={{ float:'left', marginBottom: '16px', width: 202, height: 200}}>
-                   <div style={{textAlign: 'center'}} >
-                   <img src={item.pic_small} alt="" onClick = {this.showSingleItem.bind(this, item)}/>
-                   </div>
-                   <div style={{textAlign: 'center'}}>Title:</div>
-                   <div style={{textAlign: 'center'}}>{item.album_title}</div>
-                   <div style={{textAlign: 'center'}}>Author:</div>
-                   <div style={{textAlign: 'center'}}>{item.author}</div>
-                 </div>
-                 )
-                )}
+                  {this.showDetails()}
               </div>
                 </Content>
 
@@ -90,9 +81,9 @@ class SearchItem extends Component {
     getDetail(index) {
         this.setState({
             current: this.state.result[index].content,
+            searchedItem: null
         });
     }
-
 
     showSingleItem = (item) => {
         if (this.state.isShow === 'none') {
@@ -116,7 +107,7 @@ class SearchItem extends Component {
         };
         this.timer = setTimeout(() => {
             let keywords = [];
-            if (this.state.inputValue == '') {
+            if (this.state.inputValue === '') {
                 keywords.length = 0;
             } else {
                 for (let i in this.state.result) {
@@ -140,6 +131,45 @@ class SearchItem extends Component {
 
     handleSearch() {
         console.log(this.state)
+    }
+
+    selectSearchItem(item) {
+        this.setState({
+            searchedItem: item
+        })
+    }
+
+
+    showDetails() {
+        if (this.state.searchedItem) {
+            return (
+                <div>
+          <div style={{textAlign: 'center'}} >
+          <img src={this.state.searchedItem.pic_big} alt="" onClick = {this.showSingleItem.bind(this, this.state.searchedItem)}/>
+          </div>
+          <div style={{textAlign: 'center'}}>Title:</div>
+          <div style={{textAlign: 'center'}}>{this.state.searchedItem.album_title}</div>
+          <div style={{textAlign: 'center'}}>Author:</div>
+          <div style={{textAlign: 'center'}}>{this.state.searchedItem.author}</div>
+          </div>
+            )
+        } else {
+            return (
+                this.state.current.map((item, index) => (
+                    <div 
+                 key={ index } 
+                 style={{ float:'left', marginBottom: '16px', width: 202, height: 200}}>
+                   <div style={{textAlign: 'center'}} >
+                   <img src={item.pic_small} alt="" onClick = {this.showSingleItem.bind(this, item)}/>
+                   </div>
+                   <div style={{textAlign: 'center'}}>Title:</div>
+                   <div style={{textAlign: 'center'}}>{item.album_title}</div>
+                   <div style={{textAlign: 'center'}}>Author:</div>
+                   <div style={{textAlign: 'center'}}>{item.author}</div>
+                 </div>
+                ))
+            )
+        }
     }
 
     componentDidMount() {
