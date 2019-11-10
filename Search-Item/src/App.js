@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
+import SingleItem from './singleItem.js';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
@@ -12,10 +13,13 @@ class SearchItem extends Component {
         this.state = {
             collapsed: true,
             result: [],
-            current: []
+            current: [],
+            isShow: 'none',
+            displayImg: ''
         };
         this.getItem = this.getItem.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        // this.showSingleItem = this.showSingleItem.bind(this);
         // this.getDetail = this.getDetail.bind(this);
     }
 
@@ -38,7 +42,7 @@ class SearchItem extends Component {
               </Sider>
 
               <Layout>
-                <Header style={{ background: '#fff', padding: 0 }} />
+                <Header style={{ background: '#fff', padding: 0, textAlign: 'center', fontSize: '28px' }}>Search Your Favorite Song</Header>
                 <Content style={{ margin: '24px 16px 0'}}>
               <div style={{ padding: 24, background: '#fff', minHeight: 360, overflow: 'hidden' }}>
                {this.state.current.map((item, index)=>(
@@ -46,7 +50,7 @@ class SearchItem extends Component {
                  key={ index } 
                  style={{ float:'left', marginRight:'16px', marginBottom: '16px', width:'200px', height: '200px'}}>
                    <div style={{textAlign: 'center'}} >
-                   <img src={item.pic_small} alt=""/>
+                   <img src={item.pic_small} alt="" onClick = {this.showSingleItem.bind(this, item)}/>
                    </div>
                    <div style={{textAlign: 'center'}}>Title:</div>
                    <div style={{textAlign: 'center'}}>{item.album_title}</div>
@@ -60,6 +64,9 @@ class SearchItem extends Component {
 
                 <Footer style={{ textAlign: 'center' }}>Search Item</Footer>
               </Layout>
+              <div style = {{ display: this.state.isShow }}>
+                <SingleItem displayImg = {this.state.displayImg} showSingleItem = {this.showSingleItem}/>
+              </div>
             </Layout>)
     }
 
@@ -75,8 +82,22 @@ class SearchItem extends Component {
 
     getDetail(index) {
         this.setState({
-          current: this.state.result[index].content
+            current: this.state.result[index].content,
         });
+    }
+
+    showSingleItem = (item) => {
+      console.log(this.state.displayImg);
+        if (this.state.isShow === 'none') {
+            this.setState({
+                isShow: 'block',
+                displayImg: item.pic_big
+            })
+        } else {
+            this.setState({
+                isShow: 'none'
+            })
+        }
     }
 
     handleSearch() {
