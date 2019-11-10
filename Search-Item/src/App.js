@@ -3,9 +3,11 @@ import 'antd/dist/antd.css';
 import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
 import SingleItem from './singleItem.js';
+import SearchResult from './searchResult.js';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
+const timer = null;
 
 class SearchItem extends Component {
     constructor(props) {
@@ -15,10 +17,13 @@ class SearchItem extends Component {
             result: [],
             current: [],
             isShow: 'none',
-            displayImg: ''
+            displayImg: '',
+            inputValue: '',
+            searchList: []
         };
         this.getItem = this.getItem.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handInputValue = this.handInputValue.bind(this);
         // this.showSingleItem = this.showSingleItem.bind(this);
         // this.getDetail = this.getDetail.bind(this);
     }
@@ -30,25 +35,27 @@ class SearchItem extends Component {
                 breakpoint="md"
                 collapsedWidth="0"
               >
-                <div style = {{ padding: "12px"}}>
+                <div style = {{ padding: 12}}>
                   <Search
                   placeholder="input search text"
+                  onChange = {this.handInputValue}
                   onSearch={this.handleSearch}
                   />
                 </div>
+                <SearchResult searchList = {this.state.searchList}/>
                 <Menu theme="dark" mode="inline">
                 　{this.getItem()}
                 </Menu>
               </Sider>
 
               <Layout>
-                <Header style={{ background: '#fff', padding: 0, textAlign: 'center', fontSize: '28px' }}>Search Your Favorite Song</Header>
+                <Header style={{ background: '#fff', padding: 0, textAlign: 'center', fontSize: 20 }}>Search Your Favorite Song</Header>
                 <Content style={{ margin: '24px 16px 0'}}>
               <div style={{ padding: 24, background: '#fff', minHeight: 360, overflow: 'hidden' }}>
                {this.state.current.map((item, index)=>(
                  <div 
                  key={ index } 
-                 style={{ float:'left', marginRight:'16px', marginBottom: '16px', width:'200px', height: '200px'}}>
+                 style={{ float:'left', marginBottom: '16px', width: 202, height: 200}}>
                    <div style={{textAlign: 'center'}} >
                    <img src={item.pic_small} alt="" onClick = {this.showSingleItem.bind(this, item)}/>
                    </div>
@@ -74,7 +81,7 @@ class SearchItem extends Component {
         return (
             this.state.result.map((item, index) => (
                 <Menu.Item key={ index } onClick = {this.getDetail.bind(this, index)} >
-                  <img src={item.bg_pic} alt="" style={{width: '150px'}}/>
+                  <img src={item.bg_pic} alt="" style={{width: 150}}/>
                 </Menu.Item>
             ))
         )
@@ -86,18 +93,49 @@ class SearchItem extends Component {
         });
     }
 
+
     showSingleItem = (item) => {
-      console.log(this.state.displayImg);
         if (this.state.isShow === 'none') {
             this.setState({
                 isShow: 'block',
                 displayImg: item.pic_big
-            })
+            });
         } else {
             this.setState({
                 isShow: 'none'
             })
         }
+    }
+
+    handInputValue(e) {
+        this.setState({
+            inputValue: e.target.value
+        });
+        if (this.timer) {
+            clearTimeout(this.timer)
+        };
+        this.timer = setTimeout(() => {
+            let keywords = [];
+            if (this.state.inputValue == '') {
+                keywords.length = 0;
+            } else {
+                for (let i in this.state.result) {
+                    this.state.result[i].content.forEach(item => {
+                        if (item.album_title.indexOf(this.state.inputValue) > -1 ||
+                            item.author.indexOf(this.state.inputValue) > -1) {
+                            keywords.push(item);
+                        } else {
+                            return;
+                        }
+                    })
+                }
+
+            }
+            this.setState({
+                searchList: keywords
+            })
+        }, 100);
+
     }
 
     handleSearch() {
