@@ -40,7 +40,7 @@ class SearchItem extends Component {
               >
                 <div className="searchWrapper">
                   <Search
-                    placeholder="input search text"
+                    placeholder="Search"
                     onChange = {this.handleInputValue}
                     allowClear = {true}
                   />
