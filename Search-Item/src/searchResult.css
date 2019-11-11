@@ -1,0 +1,23 @@
+.searchUl {
+	position: absolute;
+	padding: 0 12px 0 12px;
+	z-index: 1;
+}
+
+.searchLi {
+    list-style: none;
+    line-height: 100%;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis；
+}
+
+.searchLi :hover {
+    cursor: default;
+    color: #9be3de;
+}
+
+.authorInfo {
+    margin-left: 15px;
+}

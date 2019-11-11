@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './searchResult.css';
 
 class SearchResult extends Component {
     constructor(props) {
@@ -11,14 +12,17 @@ class SearchResult extends Component {
     render() {
         return (
             <div>
-        		<ul style= {{positon: 'absolute', padding: '0 12px 0 12px'}}>
+        		<ul className='searchUl'>
         		{this.props.searchList.map((item,index)=>(
-        			<li style ={{lineHeight: '100%', color: 'white', listStyle: 'none'}}
-        			    key = {index}
-        			    onClick = {this.select.bind(this, item)}
+        			<li className='searchLi'
+        			    key={index}
+        			    onClick={this.select.bind(this, item)}
         			>
-        			<span>{item.album_title}</span>
-        			<span style ={{marginLeft: 15 }}>{item.author}</span>
+        			<div>
+        				<span>{item.album_title}</span>
+        			    <span className='authorInfo'>{item.author}</span>
+        			</div>
+        			    
         			</li>
         			    )
         		    )
@@ -28,8 +32,8 @@ class SearchResult extends Component {
         )
     }
 
-    select(item){
-    	this.props.selectSearchItem(item);
+    select(item) {
+        this.props.selectSearchItem(item);
     }
 }
 

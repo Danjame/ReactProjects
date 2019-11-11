@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
+import './App.css';
 import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
 import SingleItem from './singleItem.js';
@@ -22,9 +23,9 @@ class SearchItem extends Component {
             searchList: [],
             searchedItem: null
         };
-        this.getItem = this.getItem.bind(this);
+        this.getMenuItems = this.getMenuItems.bind(this);
         this.showDetails = this.showDetails.bind(this);
-        this.handInputValue = this.handInputValue.bind(this);
+        this.handleInputValue = this.handleInputValue.bind(this);
         this.selectSearchItem = this.selectSearchItem.bind(this);
         // this.showSingleItem = this.showSingleItem.bind(this);
         // this.getDetail = this.getDetail.bind(this);
@@ -37,60 +38,101 @@ class SearchItem extends Component {
                 breakpoint="md"
                 collapsedWidth="0"
               >
-                <div style = {{ padding: 12}}>
+                <div className="searchWrapper">
                   <Search
-                  placeholder="input search text"
-                  onChange = {this.handInputValue}
-                  allowClear = {true}
+                    placeholder="input search text"
+                    onChange = {this.handleInputValue}
+                    allowClear = {true}
                   />
                 </div>
-                <SearchResult searchList = {this.state.searchList}
-                              selectSearchItem = {this.selectSearchItem}
+                <SearchResult 
+                  searchList = {this.state.searchList}
+                  selectSearchItem = {this.selectSearchItem}
                 />
                 <Menu theme="dark" mode="inline">
-                　{this.getItem()}
+                　{this.getMenuItems()}
                 </Menu>
               </Sider>
 
               <Layout>
-                <Header style={{ background: '#fff', padding: 0, textAlign: 'center', fontSize: 20 }}>Search Your Favorite Song</Header>
-                <Content style={{ margin: '24px 16px 0'}}>
-              <div style={{ padding: 24, background: '#fff', minHeight: 360, overflow: 'hidden' }}>
-                  {this.showDetails()}
-              </div>
+                <Header className="leftHeader">Search Your Favorite Song</Header>
+                <Content className="leftContent">
+                  <div className="detailsWrapper">
+                    {this.showDetails()}
+                  </div>
                 </Content>
-
-                <Footer style={{ textAlign: 'center' }}>Search Item</Footer>
+                <Footer className="footer">Search Item</Footer>
               </Layout>
               <div style = {{ display: this.state.isShow }}>
-                <SingleItem displayImg = {this.state.displayImg} showSingleItem = {this.showSingleItem}/>
+                <SingleItem 
+                  displayImg = {this.state.displayImg} 
+                  showItemImg = {this.showItemImg}
+                />
               </div>
             </Layout>)
     }
 
-    getItem() {
+    getMenuItems() {
         return (
             this.state.result.map((item, index) => (
-                <Menu.Item key={ index } onClick = {this.getDetail.bind(this, index)} >
+                <Menu.Item
+                  key={ index } 
+                  onClick = {this.getItemDetail.bind(this, index)}
+                >
                   <img src={item.bg_pic} alt="" style={{width: 150}}/>
                 </Menu.Item>
             ))
         )
     }
 
-    getDetail(index) {
+    getItemDetail(index) {
         this.setState({
             current: this.state.result[index].content,
             searchedItem: null
         });
     }
 
-    showSingleItem = (item) => {
+    showDetails() {
+        if (this.state.searchedItem) {
+            return (
+                <div>
+                  <div className="detailsInfo" >
+                     <img src={this.state.searchedItem.pic_big} alt="" 
+                          onClick = {this.showItemImg.bind(this, this.state.searchedItem)}
+                     />
+                  </div>
+                  <div className="detailsInfo">Title:</div>
+                  <div className="detailsInfo">{this.state.searchedItem.album_title}</div>
+                  <div className="detailsInfo">Author:</div>
+                  <div className="detailsInfo">{this.state.searchedItem.author}</div>
+                </div>
+            )
+        } else {
+            return (
+                this.state.current.map((item, index) => (
+                    <div className="floatWrappers"
+                       key={ index } 
+                  >
+                     <div className="detailsInfo">
+                        <img src={item.pic_small} alt="" 
+                             onClick = {this.showItemImg.bind(this, item)}/>
+                     </div>
+                     <div className="detailsInfo">Title:</div>
+                     <div className="detailsInfo">{item.album_title}</div>
+                     <div className="detailsInfo">Author:</div>
+                     <div className="detailsInfo">{item.author}</div>
+                  </div>
+                ))
+            )
+        }
+    }
+
+    showItemImg = (item) => {
         if (this.state.isShow === 'none') {
             this.setState({
                 isShow: 'block',
                 displayImg: item.pic_big
-            });
+            })
         } else {
             this.setState({
                 isShow: 'none'
@@ -98,7 +140,7 @@ class SearchItem extends Component {
         }
     }
 
-    handInputValue(e) {
+    handleInputValue(e) {
         this.setState({
             inputValue: e.target.value
         });
@@ -120,56 +162,17 @@ class SearchItem extends Component {
                         }
                     })
                 }
-
             }
             this.setState({
                 searchList: keywords
             })
         }, 100);
-
-    }
-
-    handleSearch() {
-        console.log(this.state)
     }
 
     selectSearchItem(item) {
         this.setState({
             searchedItem: item
         })
-    }
-
-
-    showDetails() {
-        if (this.state.searchedItem) {
-            return (
-                <div>
-          <div style={{textAlign: 'center'}} >
-          <img src={this.state.searchedItem.pic_big} alt="" onClick = {this.showSingleItem.bind(this, this.state.searchedItem)}/>
-          </div>
-          <div style={{textAlign: 'center'}}>Title:</div>
-          <div style={{textAlign: 'center'}}>{this.state.searchedItem.album_title}</div>
-          <div style={{textAlign: 'center'}}>Author:</div>
-          <div style={{textAlign: 'center'}}>{this.state.searchedItem.author}</div>
-          </div>
-            )
-        } else {
-            return (
-                this.state.current.map((item, index) => (
-                    <div 
-                 key={ index } 
-                 style={{ float:'left', marginBottom: '16px', width: 202, height: 200}}>
-                   <div style={{textAlign: 'center'}} >
-                   <img src={item.pic_small} alt="" onClick = {this.showSingleItem.bind(this, item)}/>
-                   </div>
-                   <div style={{textAlign: 'center'}}>Title:</div>
-                   <div style={{textAlign: 'center'}}>{item.album_title}</div>
-                   <div style={{textAlign: 'center'}}>Author:</div>
-                   <div style={{textAlign: 'center'}}>{item.author}</div>
-                 </div>
-                ))
-            )
-        }
     }
 
     componentDidMount() {
