@@ -27,8 +27,6 @@ class SearchItem extends Component {
         this.showDetails = this.showDetails.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
         this.selectSearchItem = this.selectSearchItem.bind(this);
-        // this.showSingleItem = this.showSingleItem.bind(this);
-        // this.getDetail = this.getDetail.bind(this);
     }
 
     render() {
@@ -149,7 +147,7 @@ class SearchItem extends Component {
         };
         this.timer = setTimeout(() => {
             let keywords = [];
-            if (this.state.inputValue === '') {
+            if (!this.state.inputValue) {
                 keywords.length = 0;
             } else {
                 for (let i in this.state.result) {

@@ -30,7 +30,7 @@ class TodoList extends Component {
     		  style = {{ width: "300px" }}
     		  bordered
     		  dataSource = {this.state.list}
-    		  renderItem={(item,index) => <List.Item onClick = {this.deleteItem}>{item}</List.Item>}
+    		  renderItem={(item, index) => <List.Item onClick = {this.deleteItem}>{item}</List.Item>}
     		  />
     		</div>
         )
