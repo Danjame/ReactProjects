@@ -27,6 +27,8 @@ class SearchItem extends Component {
         this.showDetails = this.showDetails.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
         this.selectSearchItem = this.selectSearchItem.bind(this);
+        this.showItemImg = this.showItemImg.bind(this);
+        this.getItemDetail = this.getItemDetail.bind(this);
     }
 
     render() {
@@ -75,7 +77,7 @@ class SearchItem extends Component {
             this.state.result.map((item, index) => (
                 <Menu.Item
                   key={ index } 
-                  onClick = {this.getItemDetail.bind(this, index)}
+                  onClick = {()=>this.getItemDetail(index)}
                 >
                   <img src={item.bg_pic} alt="" style={{width: 150}}/>
                 </Menu.Item>
@@ -96,7 +98,7 @@ class SearchItem extends Component {
                 <div>
                   <div className="detailsInfo" >
                      <img src={this.state.searchedItem.pic_big} alt="" 
-                          onClick = {this.showItemImg.bind(this, this.state.searchedItem)}
+                          onClick = {()=>this.showItemImg(this.state.searchedItem)}
                      />
                   </div>
                   <div className="detailsInfo">Title:</div>
@@ -113,7 +115,7 @@ class SearchItem extends Component {
                   >
                      <div className="detailsInfo">
                         <img src={item.pic_small} alt="" 
-                             onClick = {this.showItemImg.bind(this, item)}/>
+                             onClick = {()=>this.showItemImg(item)}/>
                      </div>
                      <div className="detailsInfo">Title:</div>
                      <div className="detailsInfo">{item.album_title}</div>
@@ -125,7 +127,7 @@ class SearchItem extends Component {
         }
     }
 
-    showItemImg = (item) => {
+    showItemImg(item) {
         if (this.state.isShow === 'none') {
             this.setState({
                 isShow: 'block',
