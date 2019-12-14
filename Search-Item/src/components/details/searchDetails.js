@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './detail.css';
 
 const SearchDetails = (props) => {
     const { searchedItem, showItemImg } = props;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './detail.css';
 
 const DefaultDetails = (props) => {
     const { current, showItemImg } = props;

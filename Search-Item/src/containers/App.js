@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
-import SingleItem from './singleItem.js';
-import SearchResult from './searchResult.js';
-import DefaultDetails from './defaultDetails.js';
-import ShowSearchDetails from './searchDetails.js';
+import SingleItem from '../components/singleItem/singleItem.js';
+import SearchResult from '../components/searchResult/searchResult.js';
+import DefaultDetails from '../components/details/defaultDetails.js';
+import SearchDetails from '../components/details/searchDetails.js';
 
 import 'antd/dist/antd.css';
 import './App.css';
@@ -61,7 +61,7 @@ class SearchItem extends Component {
                 <Content className="leftContent">
                   <div className="detailsWrapper">
                     {this.state.searchedItem?
-                      <ShowSearchDetails
+                      <SearchDetails
                       searchedItem = {this.state.searchedItem}
                       showItemImg = {this.showItemImg}
                       />:
