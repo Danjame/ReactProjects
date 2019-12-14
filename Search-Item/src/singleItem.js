@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './singleItem.css';
 
 const SingleItem = (props) => {
@@ -6,7 +6,7 @@ const SingleItem = (props) => {
     return (
         <div className='singleItemWrapper'
              onClick = {showItemImg}
-            >
+        >
             <div className='imgWrapper'>
                 <img src={displayImg} alt=""/>
             </div>

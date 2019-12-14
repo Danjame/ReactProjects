@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import 'antd/dist/antd.css';
-import './App.css';
 import { Layout, Menu, Input } from 'antd';
 import axios from 'axios';
 import SingleItem from './singleItem.js';
 import SearchResult from './searchResult.js';
+import DefaultDetails from './defaultDetails.js';
+import ShowSearchDetails from './searchDetails.js';
+
+import 'antd/dist/antd.css';
+import './App.css';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
@@ -24,11 +27,10 @@ class SearchItem extends Component {
             searchedItem: null
         };
         this.getMenuItems = this.getMenuItems.bind(this);
-        this.showDetails = this.showDetails.bind(this);
+        this.getItemDetail = this.getItemDetail.bind(this);
+        this.showItemImg = this.showItemImg.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
         this.selectSearchItem = this.selectSearchItem.bind(this);
-        this.showItemImg = this.showItemImg.bind(this);
-        this.getItemDetail = this.getItemDetail.bind(this);
     }
 
     render() {
@@ -58,7 +60,16 @@ class SearchItem extends Component {
                 <Header className="leftHeader">Search Your Favorite Song</Header>
                 <Content className="leftContent">
                   <div className="detailsWrapper">
-                    {this.showDetails()}
+                    {this.state.searchedItem?
+                      <ShowSearchDetails
+                      searchedItem = {this.state.searchedItem}
+                      showItemImg = {this.showItemImg}
+                      />:
+                      <DefaultDetails
+                      current={this.state.current}
+                      showItemImg = {this.showItemImg}
+                      />
+                    }
                   </div>
                 </Content>
                 <Footer className="footer">Search Item</Footer>
@@ -92,41 +103,6 @@ class SearchItem extends Component {
         });
     }
 
-    showDetails() {
-        if (this.state.searchedItem) {
-            return (
-                <div>
-                  <div className="detailsInfo" >
-                     <img src={this.state.searchedItem.pic_big} alt="" 
-                          onClick = {()=>this.showItemImg(this.state.searchedItem)}
-                     />
-                  </div>
-                  <div className="detailsInfo">Title:</div>
-                  <div className="detailsInfo">{this.state.searchedItem.album_title}</div>
-                  <div className="detailsInfo">Author:</div>
-                  <div className="detailsInfo">{this.state.searchedItem.author}</div>
-                </div>
-            )
-        } else {
-            return (
-                this.state.current.map((item, index) => (
-                    <div className="floatWrappers"
-                       key={ index } 
-                  >
-                     <div className="detailsInfo">
-                        <img src={item.pic_small} alt="" 
-                             onClick = {()=>this.showItemImg(item)}/>
-                     </div>
-                     <div className="detailsInfo">Title:</div>
-                     <div className="detailsInfo">{item.album_title}</div>
-                     <div className="detailsInfo">Author:</div>
-                     <div className="detailsInfo">{item.author}</div>
-                  </div>
-                ))
-            )
-        }
-    }
-
     showItemImg(item) {
         if (this.state.isShow === 'none') {
             this.setState({
@@ -154,11 +130,8 @@ class SearchItem extends Component {
             } else {
                 for (let i in this.state.result) {
                     this.state.result[i].content.forEach(item => {
-                        if (item.album_title.indexOf(this.state.inputValue) > -1 ||
-                            item.author.indexOf(this.state.inputValue) > -1) {
+                        if (item.album_title.includes(this.state.inputValue) || item.author.includes(this.state.inputValue)) {
                             keywords.push(item);
-                        } else {
-                            return;
                         }
                     })
                 }
