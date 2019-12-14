@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Input } from 'antd';
+import { Layout, Input } from 'antd';
 import axios from 'axios';
+import MenuItems from '../components/menuItems/menuItems.js';
 import SingleItem from '../components/singleItem/singleItem.js';
 import SearchResult from '../components/searchResult/searchResult.js';
 import DefaultDetails from '../components/details/defaultDetails.js';
@@ -26,7 +27,6 @@ class SearchItem extends Component {
             searchList: [],
             searchedItem: null
         };
-        this.getMenuItems = this.getMenuItems.bind(this);
         this.getItemDetail = this.getItemDetail.bind(this);
         this.showItemImg = this.showItemImg.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
@@ -51,9 +51,10 @@ class SearchItem extends Component {
                   searchList = {this.state.searchList}
                   selectSearchItem = {this.selectSearchItem}
                 />
-                <Menu theme="dark" mode="inline">
-                　{this.getMenuItems()}
-                </Menu>
+                　<MenuItems
+                    result = {this.state.result}
+                    getItemDetail = {this.getItemDetail} 
+                  />
               </Sider>
 
               <Layout>
@@ -81,19 +82,6 @@ class SearchItem extends Component {
                 />
               </div>
             </Layout>)
-    }
-
-    getMenuItems() {
-        return (
-            this.state.result.map((item, index) => (
-                <Menu.Item
-                  key={ index } 
-                  onClick = {()=>this.getItemDetail(index)}
-                >
-                  <img src={item.bg_pic} alt="" style={{width: 150}}/>
-                </Menu.Item>
-            ))
-        )
     }
 
     getItemDetail(index) {
