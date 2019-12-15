@@ -25,7 +25,9 @@ class SearchItem extends Component {
             displayImg: '',
             inputValue: '',
             searchList: [],
-            searchedItem: null
+            searchedItem: null,
+            isloading: true,
+            message: "Loading Data..."
         };
         this.getItemDetail = this.getItemDetail.bind(this);
         this.showItemImg = this.showItemImg.bind(this);
@@ -51,10 +53,13 @@ class SearchItem extends Component {
                   searchList = {this.state.searchList}
                   selectSearchItem = {this.selectSearchItem}
                 />
-                　<MenuItems
+                {this.state.isloading?
+                    <div className = "loading">{this.state.message}</div>:
+                    <MenuItems
                     result = {this.state.result}
                     getItemDetail = {this.getItemDetail} 
-                  />
+                    />  
+                }
               </Sider>
 
               <Layout>
@@ -137,15 +142,19 @@ class SearchItem extends Component {
     }
 
     componentDidMount() {
-        axios.get('https://api.apiopen.top/musicRankings').then((res) => {
-            if (res.data.code === 200) {
-                const result = res.data.result;
-                this.setState({
-                    result
-                })
-                return;
-            }
-        })
+        axios.get('https://api.apiopen.top/musicRankings')
+            .then((res) => {
+                if (res.data.code === 200) {
+                    const result = res.data.result;
+                    this.setState({
+                        result,
+                        isloading: false
+                    })
+                }
+            })
+            .catch(error => this.setState({
+                message: "Server failed, please try later."
+            }))
     }
 }
 
