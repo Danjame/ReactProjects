@@ -1,7 +1,7 @@
 import React from 'react';
 import './detail.css';
 
-const DefaultDetails = (props) => {
+const DefaultDetails = props => {
     const { current, showItemImg } = props;
     return (
         current.map((item, index) =>

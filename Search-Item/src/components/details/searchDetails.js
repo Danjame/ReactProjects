@@ -1,7 +1,7 @@
 import React from 'react';
 import './detail.css';
 
-const SearchDetails = (props) => {
+const SearchDetails = props => {
     const { searchedItem, showItemImg } = props;
     return (
         <div>

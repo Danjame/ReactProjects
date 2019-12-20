@@ -1,7 +1,7 @@
 import React from 'react';
 import './singleItem.css';
 
-const SingleItem = (props) => {
+const SingleItem = props => {
     const { showItemImg, displayImg } = props;
     return (
         <div className='singleItemWrapper'

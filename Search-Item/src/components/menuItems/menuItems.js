@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import 'antd/dist/antd.css';
 
-const MenuItems = (props) => {
+const MenuItems = props => {
     const { result, getItemDetail } = props;
     return <Menu theme="dark" mode="inline">
 	            {result.map((item, index) =>

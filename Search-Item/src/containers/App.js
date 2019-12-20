@@ -90,8 +90,9 @@ class SearchItem extends Component {
     }
 
     getItemDetail(index) {
+        const currentItem = this.state.result[index].content;
         this.setState({
-            current: this.state.result[index].content,
+            current: currentItem,
             searchedItem: null
         });
     }

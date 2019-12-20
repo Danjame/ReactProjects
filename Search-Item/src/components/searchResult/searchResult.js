@@ -1,7 +1,7 @@
 import React from 'react';
 import './searchResult.css';
 
-const SearchResult = (props) => {
+const SearchResult = props => {
     const { searchList, selectSearchItem } = props;
     return (
         <div>
