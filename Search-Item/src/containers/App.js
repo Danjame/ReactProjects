@@ -33,6 +33,8 @@ class SearchItem extends Component {
         this.showItemImg = this.showItemImg.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
         this.selectSearchItem = this.selectSearchItem.bind(this);
+
+        this.stopScroll = this.stopScroll.bind(this);
     }
 
     render() {
@@ -97,13 +99,23 @@ class SearchItem extends Component {
         });
     }
 
+    stopScroll(e) {
+        console.log("123");
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
     showItemImg(item) {
         if (this.state.isShow === 'none') {
+            //防止下层页面滚动
+            document.body.style.overflow = 'hidden';
             this.setState({
                 isShow: 'block',
                 displayImg: item.pic_big
             })
         } else {
+            //恢复下层页面滚动
+            document.body.style.overflow = 'visible';
             this.setState({
                 isShow: 'none'
             })
