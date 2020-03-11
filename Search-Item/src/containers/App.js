@@ -145,7 +145,7 @@ class SearchItem extends Component {
             this.setState({
                 searchList: keywords
             })
-        }, 100);
+        }, 500);
     }
 
     selectSearchItem(item) {
